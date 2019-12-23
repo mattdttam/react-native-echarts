@@ -4,6 +4,8 @@ import { WebView } from "react-native-webview";
 import renderChart from "./renderChart";
 import echarts from "./echarts.min";
 
+const isoPlatform = Platform.OS === "ios" ? "true" : "false";
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +35,11 @@ export default class App extends Component {
           }}
           scalesPageToFit={Platform.OS !== "ios"}
           originWhitelist={["*"]}
-          source={require("./tpl.html")}
+          source={
+            isoPlatform === "true"
+              ? require("./tpl.html")
+              : { uri: "file:///android_asset/tpl.html" }
+          }
           onMessage={event =>
             this.props.onPress
               ? this.props.onPress(JSON.parse(event.nativeEvent.data))
